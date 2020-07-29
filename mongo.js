@@ -8,7 +8,7 @@ if ( process.argv.length<3 ) {
 // const password = process.argv[2]
 
 const [fullPath, fileName, password, name, number] = process.argv
-
+console.log(fullPath, fileName)
 const url = `mongodb+srv://hb-mongodb:${password}@cluster0.4bxrf.mongodb.net/phoneBook?retryWrites=true&w=majority`
 
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -27,8 +27,10 @@ if (name && number) {
     })
 
     person.save().then(result => {
-        console.log('@save sucessed')
-        mongoose.connection.close()
+        if (result) {
+            console.log('@save sucessed')
+            mongoose.connection.close()
+        }
     }).catch(err => {
         console.log(err)
         mongoose.connection.close()

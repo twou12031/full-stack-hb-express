@@ -1,7 +1,7 @@
 require('dotenv').config()
 const express = require('express')
-const morgan = require('morgan')
-const cors = require('cors')
+// const morgan = require('morgan')
+// const cors = require('cors')
 
 // schema
 const Person = require('./models/person')
@@ -46,7 +46,7 @@ app.get('/api/persons', (req, res) => {
 app.get('/api/persons/:id', (req, res, next) => {
     const { id } = req.params
 
-    Person.findOne({_id: id}).then(dbRes => {
+    Person.findOne({ _id: id }).then(dbRes => {
         if (!dbRes) {
             res.status(400).send('@err, can\'t find this people')
             return
@@ -61,6 +61,7 @@ app.delete('/api/persons/:id', (req, res, next) => {
     const { id } = req.params
 
     Person.findByIdAndRemove(id).then(dbRes => {
+        console.log(dbRes)
         res.status(204).send()
     }).catch(err => {
         next(err)
@@ -92,11 +93,11 @@ app.put('/api/persons/:id', (req, res, next) => {
 app.post('/api/persons', (req, res, next) => {
     const { name, number } = req.body
 
-    if (!name || !number) {
-        return res.status(400).json({
-                err: 'name and number are required'
-            })
-    }
+    // if (!name || !number) {
+    //     return res.status(400).json({
+    //             err: 'name and number are required'
+    //         })
+    // }
 
     // const hasSameName = person.find(person => {
     //         return person.name === name
@@ -108,33 +109,35 @@ app.post('/api/persons', (req, res, next) => {
     //         })
     // }
 
-    Person.findOne({name}).then(dbRes => {
-        if (dbRes) {
-            const { _id } = dbRes
-            Person.findByIdAndUpdate(_id.toString(), {
-                name,
-                number
-            }, { new: true })
-                .then(updatedPerson => {
-                    res.json(updatedPerson)
-                }).catch(err => {
-                    next(err)
-                })
-            return
-        }
+    const person = new Person({
+        name,
+        number
+    })
 
-        const person = new Person({
-            name,
-            number
-        })
-
-        person.save().then(dbRes => {
-            console.log(dbRes)
-            res.json(dbRes)
-        })
+    person.save().then(dbRes => {
+        console.log(dbRes)
+        res.json(dbRes)
     }).catch(err => {
         next(err)
     })
+
+    // Person.findOne({name}).then(dbRes => {
+    //     if (dbRes) {
+    //         const { _id } = dbRes
+    //         Person.findByIdAndUpdate(_id.toString(), {
+    //             name,
+    //             number
+    //         }, { new: true })
+    //             .then(updatedPerson => {
+    //                 res.json(updatedPerson)
+    //             }).catch(err => {
+    //                 next(err)
+    //             })
+    //         return
+    //     }
+    // }).catch(err => {
+    //     next(err)
+    // })
 })
 
 const unknownEndpoint = (req, res) => {
@@ -150,6 +153,11 @@ const errHandler = (err, req, res, next) => {
     if (err.name === 'CastError' && err.kind === 'ObjectId') {
         return res.status(400).send({
             err: 'illegal id'
+        })
+    }
+    if (err.name === 'ValidationError') {
+        return res.status(400).json({
+            err: err.message
         })
     }
 
