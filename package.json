@@ -1,35 +1,36 @@
 {
-  "name": "full-stack-hb-express",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint ."
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/twou12031/full-stack-hb-express.git"
-  },
-  "keywords": [],
-  "author": "haobai12031",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/twou12031/full-stack-hb-express/issues"
-  },
-  "homepage": "https://github.com/twou12031/full-stack-hb-express#readme",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "mongoose": "^5.9.25",
-    "mongoose-unique-validator": "^2.0.3",
-    "morgan": "^1.10.0"
-  },
-  "devDependencies": {
-    "eslint": "^7.5.0",
-    "nodemon": "^2.0.4"
-  }
+    "name": "full-stack-hb-express",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "dev": "nodemon index.js",
+        "test": "jest --verbose",
+        "lint": "eslint ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/twou12031/full-stack-hb-express.git"
+    },
+    "keywords": [],
+    "author": "haobai12031",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/twou12031/full-stack-hb-express/issues"
+    },
+    "homepage": "https://github.com/twou12031/full-stack-hb-express#readme",
+    "dependencies": {
+        "cors": "^2.8.5",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "mongoose": "^5.9.25",
+        "mongoose-unique-validator": "^2.0.3",
+        "morgan": "^1.10.0"
+    },
+    "devDependencies": {
+        "eslint": "^7.5.0",
+        "jest": "^26.2.2",
+        "nodemon": "^2.0.4"
+    }
 }
