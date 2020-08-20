@@ -8,6 +8,14 @@ const requestLogger = (req, res, next) => {
     next()
 }
 
+const tokenFormater = (req, res, next) => {
+    const authorization = req.get('authorization')
+    if (authorization && authorization.toLowerCase().startsWith('bearer')) {
+        req.token = authorization.substr(7)
+    }
+    next()
+}
+
 const unknownEndpoint = (req, res) => {
     res.status(404).send({
         err: '@unknown endpoint'
@@ -30,11 +38,18 @@ const errorHandler = (err, req, res, next) => {
             err: err.message
         })
     }
+
+    if (name === 'JsonWebTokenError') {
+        return res.status(401).send({
+            err: 'invalid token'
+        })
+    }
     next(err)
 }
 
 module.exports = {
     requestLogger,
+    tokenFormater,
     unknownEndpoint,
     errorHandler
 }
