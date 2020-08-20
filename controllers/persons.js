@@ -2,51 +2,40 @@ const personsRouter = require('express').Router()
 
 const Person = require('../models/person')
 
-personsRouter.get('/', (req, res) => {
-    console.log(req)
-    Person.find({}).then(result => {
-        res.json(result)
-    })
+personsRouter.get('/', async (req, res) => {
+    // console.log(req)
+    const persons = await Person.find({})
+    res.json(persons)
 })
 
-personsRouter.get(':/id', (req, res, next) => {
+personsRouter.get('/:id', async (req, res) => {
     const { id } = req.params
-    Person.findById(id).then(result => {
-        if (result) {
-            res.json(result)
-        } else {
-            res.status(404).end()
-        }
-    }).catch(err => {
-        next(err)
-    })
+    const person = await Person.findById(id)
+    if (person) {
+        res.json(person)
+    } else {
+        res.status(404).end()
+    }
 })
 
-personsRouter.post('/', (req, res, next) => {
+personsRouter.post('/', async (req, res) => {
     const { name, number } = req.body
 
     const newPerson = new Person({
         name,
         number
     })
-
-    newPerson.save().then(result => {
-        res.json(result)
-    }).catch(err => {
-        next(err)
-    })
+    const savedPerson = await newPerson.save()
+    res.json(savedPerson)
 })
 
-personsRouter.delete(':/id', (req, res, next) => {
+personsRouter.delete('/:id', async (req, res) => {
     const { id } = req.params
-    Person.findByIdAndRemove(id).then(() => {
-        res.status(204).end()
-    }).catch(err => {
-        next(err)
-    })
+    await Person.findByIdAndRemove(id)
+    res.status(204).end()
 })
 
-personsRouter.put(':/id', (req, res, next) => {
+personsRouter.put('/:id', async (req, res) => {
     const{ id } = req.params
     const { name, number } = req.body
 
@@ -55,13 +44,11 @@ personsRouter.put(':/id', (req, res, next) => {
         number
     }
 
-    Person.findByIdAndUpdate(id, updatePerson, {
-        new: true
-    }).then(result => {
-        res.json(result)
-    }).catch(err => {
-        next(err)
-    })
+    const result = await Person
+        .findByIdAndUpdate(id, updatePerson, {
+            new: true
+        })
+    res.json(result)
 })
 
 module.exports = personsRouter
