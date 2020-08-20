@@ -5,6 +5,7 @@ const app = express()
 // const cors = require('cors')
 const personsRouter = require('./controllers/persons')
 const blogsRouter = require('./controllers/blogs')
+const usersRouter = require('./controllers/users')
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 const mongoose = require('mongoose')
@@ -14,7 +15,9 @@ logger.info('Connecting to', config.MONGODB_URI)
 mongoose.connect(config.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true
+    useCreateIndex: true,
+    //for warning `findOneAndUpdate()` and `findOneAndDelete()`
+    useFindAndModify: false
 }).then(() => {
     logger.info('Connect to MongoDB sucessed')
 }).catch(err => {
@@ -28,6 +31,7 @@ app.use(middleware.requestLogger)
 
 app.use('/api/persons', personsRouter)
 app.use('/api/blogs', blogsRouter)
+app.use('/api/users', usersRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

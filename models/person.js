@@ -1,9 +1,6 @@
 const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
 
-//for warning `findOneAndUpdate()` and `findOneAndDelete()`
-mongoose.set('useFindAndModify', false)
-
 const personSchema = new mongoose.Schema({
     name: {
         type: String,

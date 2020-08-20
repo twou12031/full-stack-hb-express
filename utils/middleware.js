@@ -30,7 +30,6 @@ const errorHandler = (err, req, res, next) => {
             err: err.message
         })
     }
-
     next(err)
 }
 
